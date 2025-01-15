@@ -1,0 +1,43 @@
+services:
+  webapi:
+    image: drexcdp/amcart-product-service
+    build:
+      context: AmCart
+      dockerfile: ./ProductService/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+    ports:
+      - "8080:8080"
+      - "443:443"
+    depends_on:
+      - db
+      - cache
+    networks:
+      - my-net
+
+  db:
+    image: drexcdp/mongo
+    build:
+      context: AmCart
+      dockerfile: ./MongoDB/Dockerfile
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    networks:
+      - my-net
+
+  cache:
+    image: drexcdp/redis
+    build:
+      context: AmCart
+      dockerfile: ./RedisCache/Dockerfile
+    ports:
+      - "6379:6379"
+    networks:
+      - my-net
+
+networks:
+  my-net:
+    driver: bridge
