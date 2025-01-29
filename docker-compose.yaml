@@ -14,6 +14,8 @@ services:
       - cache
     networks:
       - my-net
+    volumes:
+      - "/mnt/mongo/:/etc/mongo" # only this works for wsl https://github.com/docker/for-win/issues/2151#issuecomment-662343075
 
   db:
     image: drexcdp/mongo
